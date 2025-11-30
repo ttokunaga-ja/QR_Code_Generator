@@ -15,7 +15,11 @@ export default {
   },
   action: {
     download: "Download PNG",
-    generate: "Generate QR Code"
+    generate: "Generate QR Code",
+    show_password: "Show password",
+    hide_password: "Hide password",
+    show_password_short: "SHOW",
+    hide_password_short: "HIDE"
   },
   error: {
     ssid_required: "SSID is required",

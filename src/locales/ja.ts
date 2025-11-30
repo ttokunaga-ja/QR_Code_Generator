@@ -15,7 +15,11 @@ export default {
   },
   action: {
     download: "PNGダウンロード",
-    generate: "QRコード生成"
+    generate: "QRコード生成",
+    show_password: "パスワードを表示",
+    hide_password: "パスワードを隠す",
+    show_password_short: "表示",
+    hide_password_short: "隠す"
   },
   error: {
     ssid_required: "SSIDは必須です",
