@@ -1,6 +1,6 @@
 # Wi-Fi / URL QR Code Generator
 
-React + TypeScript + Vite で Wi-Fi／URL の QR コードを生成し、Go 製の軽量サーバーで静的配信するシンプルな構成です。アプリはブラウザ内でのみ入力情報を扱うため、デプロイ時にはフロントのビルド成果物と静的サーバーのバイナリをまとめたコンテナイメージ（Dockerfile）だけを配布する方針（選択肢B）としました。
+React + TypeScript + Vite で Wi-Fi／URL の QR コードを生成し、Go 製の軽量サーバーで静的配信するシンプルな構成です。アプリはブラウザ内でのみ入力情報を扱うため、デプロイ時にはフロントのビルド成果物と静的サーバーのバイナリをまとめたコンテナイメージ（Dockerfile）だけを配布する方針としました。
 
 ## ミニマル構成ポリシー
 - `frontend/` と `backend/` に役割を分離し、生成物（`build/`, `bin/`, `node_modules/`）はすべて `.gitignore` 管理。
@@ -48,7 +48,7 @@ make backend-build
 ```
 `backend/bin/server` に生成されるバイナリは `.gitignore` 済みです。
 
-## Docker デプロイ（選択肢B）
+## Docker デプロイ
 ローカルまたは CI から Dockerfile を直接利用し、静的ファイルと Go サーバーを同梱したイメージを作成します。
 ```bash
 # Build & run
@@ -68,5 +68,3 @@ docker compose build --no-cache
 - `cd frontend && npm run build`
 - `cd backend && go build -o bin/server ./server`
 - `docker compose build`
-
-いずれもエラーなく完了しました。必要に応じて `docker compose up --build` を追加実行してください。
