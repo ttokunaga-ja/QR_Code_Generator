@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './lib/i18n';
 import { QRGeneratorApp } from './components/QRGeneratorApp';
-import './styles/globals.css';
 
 export default function App() {
   // Ensure i18n is initialized

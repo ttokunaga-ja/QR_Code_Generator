@@ -1,10 +1,12 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -47,14 +49,15 @@ func spaHandler(staticDir string) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cleanPath := filepath.Clean(r.URL.Path)
+		relativePath := strings.TrimPrefix(cleanPath, "/")
 
 		// serve static assets directly when present
-		path := filepath.Join(staticDir, cleanPath)
+		path := filepath.Join(staticDir, relativePath)
 		if info, err := os.Stat(path); err == nil {
 			if info.IsDir() {
 				index := filepath.Join(path, "index.html")
 				if _, err := os.Stat(index); err == nil {
-					http.ServeFile(w, r, index)
+					serveHTMLNoCache(w, r, index)
 					return
 				}
 			}
@@ -71,8 +74,39 @@ func spaHandler(staticDir string) http.Handler {
 			return
 		}
 
-		http.ServeFile(w, r, indexFile)
+		serveHTMLNoCache(w, r, indexFile)
 	})
+}
+
+func serveHTMLNoCache(w http.ResponseWriter, r *http.Request, file string) {
+	f, err := os.Open(file)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	defer f.Close()
+
+	info, err := f.Stat()
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	// prevent browsers from caching index.html so hashed asset URLs always refresh
+	w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate")
+	w.Header().Set("Pragma", "no-cache")
+	w.Header().Set("Expires", "0")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Content-Length", strconv.FormatInt(info.Size(), 10))
+
+	if r.Method == http.MethodHead {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if _, err := io.Copy(w, f); err != nil {
+		log.Printf("error serving %s: %v", file, err)
+	}
 }
 
 func loggingMiddleware(next http.Handler) http.Handler {

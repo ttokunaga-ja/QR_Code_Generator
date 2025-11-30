@@ -29,7 +29,7 @@ RUN npm ci
 
 # Copy source and build
 COPY src ./src
-COPY index.html vite.config.ts ./
+COPY index.html vite.config.ts tailwind.config.ts postcss.config.cjs ./
 RUN npm run build
 
 ###
