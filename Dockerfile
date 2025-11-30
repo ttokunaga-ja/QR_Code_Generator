@@ -4,7 +4,7 @@
 # Frontend build stage
 ###
 FROM node:20-alpine AS frontend-builder
-WORKDIR /app
+WORKDIR /app/frontend
 
 # Allow callers to override registry / retry settings / proxies at build time
 ARG NPM_REGISTRY=https://registry.npmjs.org/
@@ -24,22 +24,21 @@ ENV HTTPS_PROXY=${HTTPS_PROXY}
 ENV NO_PROXY=${NO_PROXY}
 
 # Install dependencies
-COPY package.json package-lock.json ./
+COPY frontend/package*.json ./
 RUN npm ci
 
 # Copy source and build
-COPY src ./src
-COPY index.html vite.config.ts tailwind.config.ts postcss.config.cjs ./
+COPY frontend .
 RUN npm run build
 
 ###
 # Go server build stage
 ###
 FROM golang:1.22-alpine AS server-builder
-WORKDIR /app
+WORKDIR /app/backend
 
-COPY go.mod ./
-COPY server ./server
+COPY backend/go.mod ./
+COPY backend/server ./server
 RUN go build -o /bin/server ./server
 
 ###
@@ -51,7 +50,7 @@ WORKDIR /app
 ENV PORT=8080
 ENV STATIC_DIR=/app/build
 
-COPY --from=frontend-builder /app/build ./build
+COPY --from=frontend-builder /app/frontend/build ./build
 COPY --from=server-builder /bin/server ./server
 
 EXPOSE 8080
