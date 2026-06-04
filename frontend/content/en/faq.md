@@ -8,6 +8,10 @@ updated: 2026-06-04
 
 No. Your entry is used to show the QR code and is not saved by this app.
 
+## Does it cost anything?
+
+No. QR Code Generator is completely free to use. There are no limits on how many QR codes you create or download.
+
 ## Do I need to include https:// in a URL?
 
 No. If `https://` is missing, the app adds it before creating the QR code.
