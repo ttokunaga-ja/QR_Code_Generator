@@ -1,12 +1,14 @@
 /* CSS Custom Properties (Design Tokens) */
 :root {
+  color-scheme: light dark;
+
   /* Colors */
-  --color-bg: #F6F8F7;
-  --color-text: #172326;
-  --color-border: #146C6C;
-  --color-gray-50: #FAFBFA;
-  --color-gray-100: #EEF3F1;
-  --color-gray-400: #98A5A7;
+  --color-bg: var(--mui-palette-background-default, #F6F8F7);
+  --color-text: var(--mui-palette-text-primary, #172326);
+  --color-border: var(--mui-palette-primary-main, #146C6C);
+  --color-gray-50: var(--mui-palette-grey-50, #FAFBFA);
+  --color-gray-100: var(--mui-palette-grey-100, #EEF3F1);
+  --color-gray-400: var(--mui-palette-grey-400, #98A5A7);
 
   /* Typography */
   --font-family: system-ui, 'Segoe UI', 'Noto Sans JP', sans-serif;

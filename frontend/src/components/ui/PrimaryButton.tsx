@@ -29,13 +29,15 @@ export function PrimaryButton({
         border: '1px solid',
         borderColor: 'primary.main',
         backgroundColor: 'primary.main',
-        color: '#fff',
+        color: 'primary.contrastText',
         fontWeight: 800,
-        boxShadow: '0 14px 28px rgba(20, 108, 108, 0.2)',
+        boxShadow:
+          '0 14px 28px color-mix(in srgb, var(--mui-palette-primary-main) 22%, transparent)',
         '&:hover': {
           backgroundColor: 'primary.dark',
           borderColor: 'primary.dark',
-          boxShadow: '0 16px 32px rgba(20, 108, 108, 0.26)',
+          boxShadow:
+            '0 16px 32px color-mix(in srgb, var(--mui-palette-primary-main) 28%, transparent)',
         },
         '&.Mui-disabled': {
           backgroundColor: 'grey.100',

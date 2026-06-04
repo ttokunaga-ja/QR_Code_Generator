@@ -6,6 +6,14 @@ export default {
     description: "The preview updates automatically as you type.",
     private_badge: "Generated in-browser"
   },
+  nav: {
+    generator: "Create",
+    policy: "Security",
+    faq: "FAQ"
+  },
+  page: {
+    updated: "Updated"
+  },
   ad: {
     header: "Ad space",
     inline: "Ad space",

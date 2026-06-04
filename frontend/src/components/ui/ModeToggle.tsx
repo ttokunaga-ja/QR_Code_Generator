@@ -57,11 +57,12 @@ export function ModeToggle({
             backgroundColor: 'transparent',
             fontWeight: 800,
             textTransform: 'none',
-            '&:hover': { backgroundColor: '#fff' },
+            '&:hover': { backgroundColor: 'background.paper' },
             '&.Mui-selected': {
               backgroundColor: 'primary.main',
-              color: '#fff',
-              boxShadow: '0 10px 24px rgba(20, 108, 108, 0.24)',
+              color: 'primary.contrastText',
+              boxShadow:
+                '0 10px 24px color-mix(in srgb, var(--mui-palette-primary-main) 26%, transparent)',
               '&:hover': { backgroundColor: 'primary.dark' },
             },
             '&.MuiToggleButtonGroup-grouped:not(:first-of-type)': {

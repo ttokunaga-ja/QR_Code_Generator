@@ -6,6 +6,14 @@ export default {
     description: "入力すると自動でプレビューを更新します。",
     private_badge: "ブラウザ内で生成"
   },
+  nav: {
+    generator: "作成",
+    policy: "セキュリティ方針",
+    faq: "FAQ"
+  },
+  page: {
+    updated: "最終更新"
+  },
   ad: {
     header: "広告スペース",
     inline: "広告スペース",
