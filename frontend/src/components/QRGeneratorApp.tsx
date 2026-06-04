@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { ModeToggle } from './ui/ModeToggle';
 import { TextInput } from './ui/TextInput';
 import { PrimaryButton } from './ui/PrimaryButton';
@@ -56,7 +62,7 @@ export function QRGeneratorApp() {
     }
 
     setSsidError('');
-    
+
     // Wi-Fi QR format: WIFI:T:WPA;S:SSID;P:password;H:false;;
     const encryption = password ? 'WPA' : 'nopass';
     const wifiString = `WIFI:T:${encryption};S:${ssid};P:${password};H:false;;`;
@@ -68,8 +74,8 @@ export function QRGeneratorApp() {
           margin: 2,
           color: {
             dark: '#000000',
-            light: '#FFFFFF'
-          }
+            light: '#FFFFFF',
+          },
         });
       }
     } catch (err) {
@@ -102,8 +108,8 @@ export function QRGeneratorApp() {
           margin: 2,
           color: {
             dark: '#000000',
-            light: '#FFFFFF'
-          }
+            light: '#FFFFFF',
+          },
         });
       }
     } catch (err) {
@@ -141,85 +147,56 @@ export function QRGeneratorApp() {
   const canTogglePassword = Boolean(trimmedPassword);
 
   const passwordIcon = showPassword ? (
-    <svg
-      width="18"
-      height="12"
-      viewBox="0 0 18 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M1 6s2.5-4 8-4 8 4 8 4-2.5 4-8 4-8-4-8-4Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M11 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M2 10 16 2"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
+    <VisibilityOffIcon sx={{ fontSize: 18 }} />
   ) : (
-    <svg
-      width="18"
-      height="12"
-      viewBox="0 0 18 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M1 6s2.5-4 8-4 8 4 8 4-2.5 4-8 4-8-4-8-4Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M11 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
+    <VisibilityIcon sx={{ fontSize: 18 }} />
   );
 
+  const previewSide = isMobile ? 256 : 320;
+
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-md md:max-w-2xl">
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundColor: '#fff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: { xs: 2, md: 4 },
+      }}
+    >
+      <Box sx={{ width: '100%', maxWidth: { xs: 448, md: 672 } }}>
         {/* Language Toggle - Top Right */}
-        <div className="flex justify-end mb-4">
-          <button
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+          <Button
             onClick={toggleLanguage}
-            className="px-4 py-2 border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-colors text-sm"
             aria-label="Toggle language"
+            variant="outlined"
+            sx={{
+              px: 2,
+              py: 1,
+              fontSize: 14,
+              border: '2px solid #000',
+              color: '#000',
+              backgroundColor: '#fff',
+              '&:hover': { backgroundColor: '#000', color: '#fff', borderColor: '#000' },
+            }}
           >
             {i18n.language === 'ja' ? 'EN' : 'JA'}
-          </button>
-        </div>
+          </Button>
+        </Box>
 
         {/* Main Container */}
-        <div className="border-4 border-black bg-white p-4 md:p-6">
+        <Box sx={{ border: '4px solid #000', backgroundColor: '#fff', p: { xs: 2, md: 3 } }}>
           {/* Mode Toggle */}
-          <div className="mb-8">
-            <ModeToggle 
-              defaultMode={mode} 
-              onChange={handleModeChange}
-            />
-          </div>
+          <Box sx={{ mb: 4 }}>
+            <ModeToggle defaultMode={mode} onChange={handleModeChange} />
+          </Box>
 
           {/* Input Section */}
-          <div className="mb-8">
+          <Box sx={{ mb: 4 }}>
             {mode === 'wifi' ? (
-              <div className="space-y-4">
+              <Stack spacing={2}>
                 <TextInput
                   id="ssid-input"
                   label={t('label.ssid')}
@@ -244,12 +221,12 @@ export function QRGeneratorApp() {
                     canTogglePassword ? () => setShowPassword((prev) => !prev) : undefined
                   }
                 />
-                <div className="pt-2 border-t-2 border-black">
+                <Box sx={{ pt: 1, borderTop: '2px solid #000' }}>
                   <NoticeText>{t('notice.wifi')}</NoticeText>
-                </div>
-              </div>
+                </Box>
+              </Stack>
             ) : (
-              <div className="space-y-4">
+              <Stack spacing={2}>
                 <TextInput
                   id="url-input"
                   label={t('label.url')}
@@ -258,56 +235,70 @@ export function QRGeneratorApp() {
                   onChange={setUrl}
                   error={urlError}
                 />
-                <div className="pt-2 border-t-2 border-black">
+                <Box sx={{ pt: 1, borderTop: '2px solid #000' }}>
                   <NoticeText>{t('notice.url')}</NoticeText>
-                </div>
-              </div>
+                </Box>
+              </Stack>
             )}
-          </div>
+          </Box>
 
           {/* QR Preview Section */}
-          <div className="mb-8">
-            <div
-              className={`border-2 border-black bg-white mx-auto flex items-center justify-center ${
-                isMobile ? 'w-64 h-64' : 'w-80 h-80'
-              }`}
+          <Box sx={{ mb: 4 }}>
+            <Box
+              sx={{
+                border: '2px solid #000',
+                backgroundColor: '#fff',
+                mx: 'auto',
+                width: previewSide,
+                height: previewSide,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
             >
               {shouldShowQR ? (
-                <canvas
+                <Box
+                  component="canvas"
                   ref={canvasRef}
-                  className="w-full h-full p-4"
                   aria-label={t('qr.preview')}
+                  sx={{ width: '100%', height: '100%', p: 2 }}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center gap-2 text-center pointer-events-none px-6">
-                  <div className="text-4xl">⊞</div>
-                  <div className="text-xs text-black whitespace-pre-line">
+                <Stack
+                  spacing={1}
+                  sx={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    pointerEvents: 'none',
+                    px: 3,
+                  }}
+                >
+                  <Box sx={{ fontSize: 36 }}>⊞</Box>
+                  <Typography sx={{ fontSize: 12, color: '#000', whiteSpace: 'pre-line' }}>
                     {t('qr.preview')}
-                  </div>
-                  <div className="text-xs text-black opacity-70">
+                  </Typography>
+                  <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.7 }}>
                     {isMobile ? '256×256px' : '320×320px'}
-                  </div>
-                </div>
+                  </Typography>
+                </Stack>
               )}
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Download Button */}
-          <div className="mb-6">
-            <PrimaryButton 
-              onClick={downloadQR} 
-              disabled={!shouldShowQR}
-            >
+          <Box sx={{ mb: 3 }}>
+            <PrimaryButton onClick={downloadQR} disabled={!shouldShowQR}>
               {t('action.download')}
             </PrimaryButton>
-          </div>
+          </Box>
 
           {/* Footer Notice */}
-          <div className="pt-4 border-t-2 border-black">
+          <Box sx={{ pt: 2, borderTop: '2px solid #000' }}>
             <NoticeText>{t('notice.security')}</NoticeText>
-          </div>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }

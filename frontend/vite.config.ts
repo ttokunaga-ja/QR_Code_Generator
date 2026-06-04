@@ -3,7 +3,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: './',
+  // Absolute base so hashed asset URLs survive the Cloudflare Pages SPA
+  // fallback (/* -> /index.html) even on deep paths.
+  base: '/',
   plugins: [
     react(),
     {

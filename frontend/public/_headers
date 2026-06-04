@@ -1,0 +1,18 @@
+# Hashed, content-addressed assets never change — cache them aggressively.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# index.html must always be re-fetched so new hashed asset URLs are picked up
+# (replaces the no-store behavior the old Go server set by hand).
+/index.html
+  Cache-Control: no-store, must-revalidate
+
+# Security headers. The app handles Wi-Fi passwords purely in the browser and
+# makes no network calls, so the policy can be strict.
+# style-src allows 'unsafe-inline' because MUI/Emotion injects runtime <style> tags.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'

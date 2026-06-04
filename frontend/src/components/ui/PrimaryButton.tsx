@@ -1,33 +1,45 @@
+import Button from '@mui/material/Button';
+import type { SxProps, Theme } from '@mui/material/styles';
+
 interface PrimaryButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
-  className?: string;
+  sx?: SxProps<Theme>;
   type?: 'button' | 'submit';
 }
 
-export function PrimaryButton({ 
-  children, 
-  onClick, 
+export function PrimaryButton({
+  children,
+  onClick,
   disabled = false,
-  className = '',
-  type = 'button'
+  sx,
+  type = 'button',
 }: PrimaryButtonProps) {
   return (
-    <button
+    <Button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`w-full py-4 px-6 border-2 border-black bg-black text-white transition-colors 
-                  hover:bg-white hover:text-black 
-                  disabled:bg-gray-400 disabled:border-gray-400 disabled:text-white disabled:cursor-not-allowed 
-                  disabled:hover:bg-gray-400 disabled:hover:text-white ${className}`}
-      style={{ 
-        fontFamily: 'system-ui, Segoe UI, Noto Sans JP, sans-serif',
-        fontWeight: 500
+      fullWidth
+      variant="contained"
+      sx={{
+        py: 1.75,
+        px: 3,
+        border: '2px solid #000',
+        backgroundColor: '#000',
+        color: '#fff',
+        fontWeight: 500,
+        '&:hover': { backgroundColor: '#fff', color: '#000', borderColor: '#000' },
+        '&.Mui-disabled': {
+          backgroundColor: 'grey.400',
+          borderColor: 'grey.400',
+          color: '#fff',
+        },
+        ...sx,
       }}
     >
       {children}
-    </button>
+    </Button>
   );
 }
