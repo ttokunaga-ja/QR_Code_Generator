@@ -1,5 +1,5 @@
 {
-  "name": "QRcode_Generator",
+  "name": "qr-code-generator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

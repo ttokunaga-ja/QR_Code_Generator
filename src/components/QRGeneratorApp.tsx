@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState, type ReactElement } from 'react';
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import QRCode from 'qrcode';
 import AppBar from '@mui/material/AppBar';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
-import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -54,23 +52,29 @@ function routeFromPath(pathname: string): AppRoute {
 interface AdSlotProps {
   label: string;
   size: string;
-  orientation?: 'horizontal' | 'vertical';
 }
 
-function AdSlot({ label, size, orientation = 'horizontal' }: AdSlotProps) {
+function AdSlot({ label, size }: AdSlotProps) {
   return (
     <Paper
       component="aside"
+      aria-label={label}
       sx={{
+        width: '100%',
+        maxWidth: { xs: 320, sm: 728 },
+        height: { xs: 84, sm: 96 },
+        mx: 'auto',
+        alignSelf: 'center',
+        boxSizing: 'border-box',
         border: '1px dashed',
         borderColor: 'divider',
         backgroundColor: 'color-mix(in srgb, var(--mui-palette-background-paper) 74%, transparent)',
-        minHeight: orientation === 'vertical' ? 250 : { xs: 84, sm: 96 },
         p: 2,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
+        overflow: 'hidden',
       }}
     >
       <Stack spacing={0.5} alignItems="center">
@@ -88,14 +92,18 @@ interface HeaderNavButtonProps {
   active: boolean;
   icon: ReactElement;
   label: string;
-  onClick: () => void;
+  href: string;
+  onClick: (event: ReactMouseEvent) => void;
 }
 
-function HeaderNavButton({ active, icon, label, onClick }: HeaderNavButtonProps) {
+function HeaderNavButton({ active, icon, label, href, onClick }: HeaderNavButtonProps) {
   return (
     <Tooltip title={label}>
       <Button
+        component="a"
+        href={href}
         aria-label={label}
+        aria-current={active ? 'page' : undefined}
         onClick={onClick}
         startIcon={icon}
         variant={active ? 'contained' : 'outlined'}
@@ -128,13 +136,10 @@ function HeaderNavButton({ active, icon, label, onClick }: HeaderNavButtonProps)
 
 interface DocumentPageViewProps {
   page: DocumentPageContent;
-  pageKey: DocumentPageKey;
   updatedLabel: string;
 }
 
-function DocumentPageView({ page, pageKey, updatedLabel }: DocumentPageViewProps) {
-  const icon = pageKey === 'policy' ? <SecurityIcon /> : <HelpOutlineIcon />;
-
+function DocumentPageView({ page, updatedLabel }: DocumentPageViewProps) {
   return (
     <Paper
       component="main"
@@ -146,18 +151,7 @@ function DocumentPageView({ page, pageKey, updatedLabel }: DocumentPageViewProps
       }}
     >
       <Stack spacing={3}>
-        <Stack spacing={1.25}>
-          <Chip
-            icon={icon}
-            label={page.title}
-            sx={{
-              alignSelf: 'flex-start',
-              borderRadius: 999,
-              color: 'primary.main',
-              backgroundColor: 'grey.100',
-              fontWeight: 800,
-            }}
-          />
+        <Stack spacing={1.25} alignItems="center" textAlign="center">
           <Typography component="h1" variant="h4" sx={{ fontSize: { xs: 27, sm: 36 } }}>
             {page.title}
           </Typography>
@@ -226,7 +220,24 @@ export function QRGeneratorApp() {
     }
   }, [mode, ssid, password, url, text, qrSize]);
 
-  const navigateTo = (nextRoute: AppRoute) => {
+  const navigateTo = (nextRoute: AppRoute, event?: ReactMouseEvent) => {
+    // The nav items are real <a href> so crawlers can follow them and each
+    // route resolves to its own pre-rendered HTML. Intercept ordinary clicks
+    // for client-side routing, but let modified clicks (new tab, etc.) pass.
+    if (event) {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+      event.preventDefault();
+    }
+
     const nextPath = routePaths[nextRoute];
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
@@ -235,7 +246,27 @@ export function QRGeneratorApp() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const generateWiFiQR = async () => {
+  // `qrcode` is ~50 kB, only needed once the user actually generates a code,
+  // so it is dynamically imported to keep it out of the initial bundle.
+  const renderQRCode = async (value: string) => {
+    if (!canvasRef.current) return;
+
+    try {
+      const { default: QRCode } = await import('qrcode');
+      await QRCode.toCanvas(canvasRef.current, value, {
+        width: qrSize,
+        margin: 2,
+        color: {
+          dark: '#172326',
+          light: '#FFFFFF',
+        },
+      });
+    } catch (err) {
+      console.error('QR generation failed:', err);
+    }
+  };
+
+  const generateWiFiQR = () => {
     if (!ssid.trim()) {
       setSsidError(t('error.ssid_required'));
       return;
@@ -244,25 +275,10 @@ export function QRGeneratorApp() {
     setSsidError('');
 
     const encryption = password ? 'WPA' : 'nopass';
-    const wifiString = `WIFI:T:${encryption};S:${ssid};P:${password};H:false;;`;
-
-    try {
-      if (canvasRef.current) {
-        await QRCode.toCanvas(canvasRef.current, wifiString, {
-          width: qrSize,
-          margin: 2,
-          color: {
-            dark: '#172326',
-            light: '#FFFFFF',
-          },
-        });
-      }
-    } catch (err) {
-      console.error('QR generation failed:', err);
-    }
+    void renderQRCode(`WIFI:T:${encryption};S:${ssid};P:${password};H:false;;`);
   };
 
-  const generateURLQR = async () => {
+  const generateURLQR = () => {
     if (!url.trim()) return;
 
     let fullUrl = url.trim();
@@ -278,40 +294,14 @@ export function QRGeneratorApp() {
       return;
     }
 
-    try {
-      if (canvasRef.current) {
-        await QRCode.toCanvas(canvasRef.current, fullUrl, {
-          width: qrSize,
-          margin: 2,
-          color: {
-            dark: '#172326',
-            light: '#FFFFFF',
-          },
-        });
-      }
-    } catch (err) {
-      console.error('QR generation failed:', err);
-    }
+    void renderQRCode(fullUrl);
   };
 
-  const generateTextQR = async () => {
+  const generateTextQR = () => {
     const value = text.trim();
     if (!value) return;
 
-    try {
-      if (canvasRef.current) {
-        await QRCode.toCanvas(canvasRef.current, value, {
-          width: qrSize,
-          margin: 2,
-          color: {
-            dark: '#172326',
-            light: '#FFFFFF',
-          },
-        });
-      }
-    } catch (err) {
-      console.error('QR generation failed:', err);
-    }
+    void renderQRCode(value);
   };
 
   const downloadQR = () => {
@@ -594,7 +584,9 @@ export function QRGeneratorApp() {
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ minHeight: { xs: 64, sm: 72 }, gap: 1.5 }}>
             <ButtonBase
-              onClick={() => navigateTo('generator')}
+              component="a"
+              href={routePaths.generator}
+              onClick={(event: ReactMouseEvent) => navigateTo('generator', event)}
               aria-label={t('nav.generator')}
               sx={{ borderRadius: 2, flexGrow: 1, minWidth: 0, justifyContent: 'flex-start' }}
             >
@@ -648,19 +640,22 @@ export function QRGeneratorApp() {
                 active={route === 'generator'}
                 icon={<HomeRoundedIcon />}
                 label={t('nav.generator')}
-                onClick={() => navigateTo('generator')}
+                href={routePaths.generator}
+                onClick={(event) => navigateTo('generator', event)}
               />
               <HeaderNavButton
                 active={route === 'policy'}
                 icon={<SecurityIcon />}
                 label={t('nav.policy')}
-                onClick={() => navigateTo('policy')}
+                href={routePaths.policy}
+                onClick={(event) => navigateTo('policy', event)}
               />
               <HeaderNavButton
                 active={route === 'faq'}
                 icon={<HelpOutlineIcon />}
                 label={t('nav.faq')}
-                onClick={() => navigateTo('faq')}
+                href={routePaths.faq}
+                onClick={(event) => navigateTo('faq', event)}
               />
               <Tooltip title={t('action.toggle_language')}>
                 <IconButton
@@ -691,39 +686,20 @@ export function QRGeneratorApp() {
       </AppBar>
 
       <Container maxWidth="lg" sx={{ py: { xs: 2.5, md: 4 } }}>
-        <Box sx={{ mb: 3 }}>
-          <AdSlot label={t('ad.header')} size={isMobile ? '320 x 80' : '728 x 90'} />
-        </Box>
+        <Stack spacing={3} sx={{ width: '100%', maxWidth: 960, mx: 'auto' }}>
+          <AdSlot label={t('ad.top')} size={isMobile ? '320 x 80' : '728 x 90'} />
 
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', lg: 'minmax(0, 1fr) 300px' },
-            gap: 3,
-            alignItems: 'start',
-          }}
-        >
-          <Stack spacing={3}>
-            {documentPage && documentPageKey ? (
-              <DocumentPageView
-                page={documentPage}
-                pageKey={documentPageKey}
-                updatedLabel={t('page.updated')}
-              />
-            ) : (
-              generatorPanel
-            )}
+          {documentPage && documentPageKey ? (
+            <DocumentPageView
+              page={documentPage}
+              updatedLabel={t('page.updated')}
+            />
+          ) : (
+            generatorPanel
+          )}
 
-            <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
-              <AdSlot label={t('ad.inline')} size="320 x 100" />
-            </Box>
-          </Stack>
-
-          <Stack spacing={2.5} sx={{ display: { xs: 'none', lg: 'flex' } }}>
-            <AdSlot label={t('ad.sidebar_primary')} size="300 x 250" orientation="vertical" />
-            <AdSlot label={t('ad.sidebar_secondary')} size="300 x 100" />
-          </Stack>
-        </Box>
+          <AdSlot label={t('ad.bottom')} size={isMobile ? '320 x 80' : '728 x 90'} />
+        </Stack>
       </Container>
     </Box>
   );

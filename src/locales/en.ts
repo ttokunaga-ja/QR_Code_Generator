@@ -14,10 +14,8 @@ export default {
     updated: "Updated"
   },
   ad: {
-    header: "Ad space",
-    inline: "Ad space",
-    sidebar_primary: "Ad space",
-    sidebar_secondary: "Ad space"
+    top: "Top ad space",
+    bottom: "Bottom ad space"
   },
   mode: {
     wifi: "Wi-Fi",

@@ -1,5 +1,5 @@
 ---
-title: Safe Use Guide
+title: Security Policy
 description: How to handle your entries and share QR codes safely.
 updated: 2026-06-04
 ---

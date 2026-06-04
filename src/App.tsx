@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -8,11 +7,7 @@ import theme from './lib/theme';
 import { QRGeneratorApp } from './components/QRGeneratorApp';
 
 export default function App() {
-  // Ensure i18n is initialized
-  useEffect(() => {
-    i18n.init();
-  }, []);
-
+  // i18n is initialized synchronously in ./lib/i18n on import.
   return (
     <I18nextProvider i18n={i18n}>
       <ThemeProvider theme={theme} defaultMode="system">

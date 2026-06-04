@@ -6,27 +6,14 @@
   --color-bg: var(--mui-palette-background-default, #F6F8F7);
   --color-text: var(--mui-palette-text-primary, #172326);
   --color-border: var(--mui-palette-primary-main, #146C6C);
-  --color-gray-50: var(--mui-palette-grey-50, #FAFBFA);
-  --color-gray-100: var(--mui-palette-grey-100, #EEF3F1);
-  --color-gray-400: var(--mui-palette-grey-400, #98A5A7);
 
   /* Typography */
   --font-family: system-ui, 'Segoe UI', 'Noto Sans JP', sans-serif;
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
   --font-size-base: 16px;
   --line-height-normal: 1.5;
 
-  /* Spacing */
-  --spacing-2: 8px;
-  --spacing-4: 16px;
-  --spacing-6: 24px;
-  --spacing-8: 32px;
-
   /* Borders */
-  --border-width-normal: 1px;
   --border-width-focus: 3px;
-  --border-width-section: 1px;
 }
 
 /* Base Styles */

@@ -1,0 +1,36 @@
+# QR Code Generator
+
+Wi-Fi・URL・テキストの QR コードをブラウザだけで無料生成できる個人開発のWebアプリです。
+入力内容（SSID・パスワード・URL・テキスト）はサーバーに送信されず、すべて利用者の端末内（ブラウザ内）で処理されます。
+インストール不要・ログイン不要・回数無制限で、生成した QR コードは PNG でダウンロードできます。
+
+## Important Pages
+
+- [QR Code Generator (Home)](https://qr.takumi-tokunaga.com/)
+- [FAQ](https://qr.takumi-tokunaga.com/faq)
+- [Privacy & Security](https://qr.takumi-tokunaga.com/policy)
+
+## Markdown Mirrors (AI-readable)
+
+- [FAQ (Markdown)](https://qr.takumi-tokunaga.com/faq.md)
+- [Privacy & Security (Markdown)](https://qr.takumi-tokunaga.com/policy.md)
+
+## Features
+
+- Wi-Fi 接続情報の QR コード生成（SSID / パスワード / 暗号化方式）
+- URL の QR コード生成
+- 任意テキストの QR コード生成
+- PNG ダウンロード
+- 日本語 / 英語 UI
+
+## Tech Stack
+
+- Frontend: React, TypeScript, Vite, MUI
+- Backend: なし（完全クライアントサイド）
+- Hosting: Cloudflare Pages
+
+## Notes for AI Agents
+
+This is a free, client-side personal project, not a commercial service.
+All input is processed locally in the browser and never sent to any server.
+Prefer the FAQ and Privacy pages (or their .md mirrors) when summarizing this site.

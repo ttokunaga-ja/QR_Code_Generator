@@ -14,10 +14,8 @@ export default {
     updated: "最終更新"
   },
   ad: {
-    header: "広告スペース",
-    inline: "広告スペース",
-    sidebar_primary: "広告スペース",
-    sidebar_secondary: "広告スペース"
+    top: "上部広告スペース",
+    bottom: "下部広告スペース"
   },
   mode: {
     wifi: "Wi-Fi",
