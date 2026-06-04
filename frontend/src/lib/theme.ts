@@ -2,30 +2,32 @@ import { createTheme } from '@mui/material/styles';
 
 const FONT_FAMILY = "system-ui, 'Segoe UI', 'Noto Sans JP', sans-serif";
 
-/**
- * モノクロのブルータリスト調デザインをMUIテーマに集約。
- * - 白地に黒、角丸ゼロ、太い黒枠
- * - ホバーで白黒反転、フォーカスは枠を太く
- * これまでTailwindのユーティリティで散在していた装飾をここへ一元化する。
- */
 export const theme = createTheme({
   palette: {
     mode: 'light',
-    primary: { main: '#000000', contrastText: '#FFFFFF' },
-    background: { default: '#FFFFFF', paper: '#FFFFFF' },
-    text: { primary: '#000000', secondary: '#000000' },
-    grey: { 50: '#FAFAFA', 100: '#F5F5F5', 400: '#A3A3A3' },
+    primary: { main: '#146C6C', dark: '#0D4F4F', contrastText: '#FFFFFF' },
+    secondary: { main: '#E35D45', contrastText: '#FFFFFF' },
+    background: { default: '#F6F8F7', paper: '#FFFFFF' },
+    text: { primary: '#172326', secondary: '#657174' },
+    divider: '#DDE5E2',
+    grey: { 50: '#FAFBFA', 100: '#EEF3F1', 300: '#DDE5E2', 400: '#98A5A7' },
   },
-  shape: { borderRadius: 0 },
+  shape: { borderRadius: 8 },
   typography: {
     fontFamily: FONT_FAMILY,
     fontSize: 16,
-    button: { textTransform: 'none', fontWeight: 500 },
+    h1: { fontWeight: 800, letterSpacing: 0 },
+    h2: { fontWeight: 800, letterSpacing: 0 },
+    h3: { fontWeight: 700, letterSpacing: 0 },
+    button: { textTransform: 'none', fontWeight: 700, letterSpacing: 0 },
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        body: { backgroundColor: '#FFFFFF', color: '#000000' },
+        body: {
+          backgroundColor: '#F6F8F7',
+          color: '#172326',
+        },
         canvas: {
           display: 'block',
           imageRendering: 'pixelated',
@@ -33,29 +35,48 @@ export const theme = createTheme({
       },
     },
     MuiButton: {
-      defaultProps: { disableElevation: true, disableRipple: true },
+      defaultProps: { disableElevation: true },
       styleOverrides: {
-        root: { borderRadius: 0, transition: 'background-color 0.15s, color 0.15s' },
+        root: {
+          borderRadius: 999,
+          transition: 'background-color 0.18s, color 0.18s, border-color 0.18s',
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: { borderRadius: 999 },
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 0,
+          borderRadius: 14,
           backgroundColor: '#FFFFFF',
           '& .MuiOutlinedInput-notchedOutline': {
-            borderWidth: 2,
-            borderColor: '#000000',
+            borderWidth: 1,
+            borderColor: '#D7E0DD',
           },
-          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#000000' },
+          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#146C6C' },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderWidth: 3,
-            borderColor: '#000000',
+            borderWidth: 2,
+            borderColor: '#146C6C',
           },
-          '&.Mui-error .MuiOutlinedInput-notchedOutline': { borderColor: '#000000' },
+          '&.Mui-error .MuiOutlinedInput-notchedOutline': { borderColor: '#E35D45' },
         },
-        input: { padding: '12px', fontSize: 14, color: '#000000' },
+        input: { padding: '14px 14px', fontSize: 15, color: '#172326' },
       },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: '#657174',
+          '&.Mui-focused': { color: '#146C6C' },
+        },
+      },
+    },
+    MuiPaper: {
+      defaultProps: { elevation: 0 },
     },
   },
 });

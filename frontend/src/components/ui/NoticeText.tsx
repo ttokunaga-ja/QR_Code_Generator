@@ -17,8 +17,7 @@ export function NoticeText({ children, icon = true }: NoticeTextProps) {
         gap: 0.5,
         fontSize: 12,
         lineHeight: 1.5,
-        color: '#000',
-        opacity: 0.7,
+        color: 'text.secondary',
       }}
     >
       {icon && <InfoOutlinedIcon sx={{ fontSize: 14, mt: '2px', flexShrink: 0 }} />}

@@ -1,4 +1,17 @@
 export default {
+  app: {
+    title: "QR Code Generator",
+    subtitle: "Fast Wi-Fi / URL codes",
+    heading: "Create a QR code",
+    description: "The preview updates automatically as you type.",
+    private_badge: "Generated in-browser"
+  },
+  ad: {
+    header: "Ad space",
+    inline: "Ad space",
+    sidebar_primary: "Ad space",
+    sidebar_secondary: "Ad space"
+  },
   mode: {
     wifi: "Wi-Fi",
     url: "URL"
@@ -16,6 +29,7 @@ export default {
   action: {
     download: "Download PNG",
     generate: "Generate QR Code",
+    toggle_language: "Toggle language",
     show_password: "Show password",
     hide_password: "Hide password",
     show_password_short: "SHOW",

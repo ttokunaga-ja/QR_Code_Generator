@@ -36,7 +36,12 @@ export function ModeToggle({
       onChange={handleModeChange}
       disabled={disabled}
       fullWidth
-      sx={{ gap: 1 }}
+      sx={{
+        gap: 1,
+        p: 0.5,
+        backgroundColor: 'grey.100',
+        borderRadius: 999,
+      }}
     >
       {(['wifi', 'url'] as const).map((value) => (
         <ToggleButton
@@ -45,21 +50,22 @@ export function ModeToggle({
           aria-label={value === 'wifi' ? 'Wi-Fi mode' : 'URL mode'}
           sx={{
             flex: 1,
-            py: 1.5,
-            border: '2px solid #000',
-            borderRadius: 0,
-            color: '#000',
-            backgroundColor: '#fff',
+            py: 1.25,
+            border: 0,
+            borderRadius: '999px !important',
+            color: 'text.secondary',
+            backgroundColor: 'transparent',
+            fontWeight: 800,
             textTransform: 'none',
-            '&:hover': { backgroundColor: 'grey.100' },
+            '&:hover': { backgroundColor: '#fff' },
             '&.Mui-selected': {
-              backgroundColor: '#000',
+              backgroundColor: 'primary.main',
               color: '#fff',
-              '&:hover': { backgroundColor: '#000' },
+              boxShadow: '0 10px 24px rgba(20, 108, 108, 0.24)',
+              '&:hover': { backgroundColor: 'primary.dark' },
             },
-            // ToggleButtonGroup collapses the divider; keep a full 2px frame on each button
             '&.MuiToggleButtonGroup-grouped:not(:first-of-type)': {
-              borderLeft: '2px solid #000',
+              borderLeft: 0,
               marginLeft: 0,
             },
           }}

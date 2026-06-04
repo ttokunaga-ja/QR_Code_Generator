@@ -22,9 +22,9 @@ interface TextInputProps {
 }
 
 const adornmentIconSx = {
-  color: '#000',
+  color: 'text.secondary',
   borderRadius: '50%',
-  '&:hover': { backgroundColor: '#000', color: '#fff' },
+  '&:hover': { backgroundColor: 'grey.100', color: 'primary.main' },
 } as const;
 
 export function TextInput({
@@ -79,9 +79,11 @@ export function TextInput({
       fullWidth
       variant="outlined"
       label={label}
-      InputLabelProps={{ sx: { color: '#000', fontSize: 14 } }}
+      InputLabelProps={{ sx: { fontSize: 14, fontWeight: 700 } }}
       slotProps={{
-        formHelperText: { sx: { color: '#000', fontWeight: 700, fontSize: 12, ml: 0, mt: 1 } },
+        formHelperText: {
+          sx: { color: 'secondary.main', fontWeight: 700, fontSize: 12, ml: 0, mt: 1 },
+        },
       }}
       InputProps={{
         startAdornment: leadingIcon ? (

@@ -1,4 +1,17 @@
 export default {
+  app: {
+    title: "QR Code Generator",
+    subtitle: "Wi-Fi / URL をすばやく作成",
+    heading: "QRコードを作成",
+    description: "入力すると自動でプレビューを更新します。",
+    private_badge: "ブラウザ内で生成"
+  },
+  ad: {
+    header: "広告スペース",
+    inline: "広告スペース",
+    sidebar_primary: "広告スペース",
+    sidebar_secondary: "広告スペース"
+  },
   mode: {
     wifi: "Wi-Fi",
     url: "URL"
@@ -16,6 +29,7 @@ export default {
   action: {
     download: "PNGダウンロード",
     generate: "QRコード生成",
+    toggle_language: "言語を切り替え",
     show_password: "パスワードを表示",
     hide_password: "パスワードを隠す",
     show_password_short: "表示",
