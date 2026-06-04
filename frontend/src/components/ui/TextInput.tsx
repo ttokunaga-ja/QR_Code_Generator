@@ -12,6 +12,9 @@ interface TextInputProps {
   value?: string;
   autoFocus?: boolean;
   type?: 'text' | 'password';
+  multiline?: boolean;
+  minRows?: number;
+  maxRows?: number;
   onChange?: (value: string) => void;
   leadingIcon?: ReactNode;
   onLeadingIconClick?: () => void;
@@ -36,6 +39,9 @@ export function TextInput({
   value: controlledValue,
   autoFocus = false,
   type = 'text',
+  multiline = false,
+  minRows,
+  maxRows,
   onChange,
   leadingIcon,
   onLeadingIconClick,
@@ -73,6 +79,9 @@ export function TextInput({
       onChange={handleChange}
       placeholder={placeholder}
       autoFocus={autoFocus}
+      multiline={multiline}
+      minRows={minRows}
+      maxRows={maxRows}
       required={required}
       error={hasError}
       helperText={hasError ? `⚠ ${error}` : undefined}

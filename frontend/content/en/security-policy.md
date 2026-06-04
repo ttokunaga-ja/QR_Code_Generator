@@ -1,27 +1,25 @@
 ---
-title: Security Policy
-description: Core data-handling and safety policy for QR Code Generator.
+title: Safe Use Guide
+description: How to handle your entries and share QR codes safely.
 updated: 2026-06-04
 ---
 
-## Core policy
+## About your entries
 
-QR Code Generator processes SSIDs, passwords, and URLs only inside your browser.
+Wi-Fi details, URLs, and text are used only to create the QR code shown on the page.
 
-- QR code generation runs locally in JavaScript.
-- Input values are not sent to a server.
-- No external API is used to generate QR codes.
-- Generated QR code images are saved as PNG files only when you choose to download them.
+- Entries are not saved by this app.
+- The QR image is saved only when you press the download button.
+- A QR code contains the information you entered.
 
-## Information handled
+## When using Wi-Fi details
 
-The app handles Wi-Fi connection details and URLs. Wi-Fi passwords can be shown or hidden on screen, but they are not stored or transmitted by this app.
+When you share a Wi-Fi QR code, the recipient may be able to read the network name and password. Only enter Wi-Fi details that are safe to share.
 
-## Network access and ads
+## When using URLs or text
 
-The app itself does not need network access to generate QR codes. If ad delivery is added later, this page should be updated with the required network destinations, cookie behavior, and measurement policy.
+QR codes can be printed or posted widely. Do not include personal information, secret words, or messages that should not become public.
 
-## User responsibility
+## Ads
 
-Only enter network names, URLs, and passwords that are safe to share. Do not publish private workplace networks or personal router credentials through public pages or unrestricted QR codes.
-
+This page includes ad spaces. Ad content and linked destinations may be provided separately from QR Code Generator.

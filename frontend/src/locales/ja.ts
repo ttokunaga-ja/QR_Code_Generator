@@ -1,10 +1,9 @@
 export default {
   app: {
     title: "QR Code Generator",
-    subtitle: "Wi-Fi / URL をすばやく作成",
+    subtitle: "Wi-Fi / URL / テキストをすばやく作成",
     heading: "QRコードを作成",
-    description: "入力すると自動でプレビューを更新します。",
-    private_badge: "ブラウザ内で生成"
+    description: "入力すると自動でプレビューを更新します。"
   },
   nav: {
     generator: "作成",
@@ -22,20 +21,23 @@ export default {
   },
   mode: {
     wifi: "Wi-Fi",
-    url: "URL"
+    url: "URL",
+    text: "テキスト"
   },
   label: {
     ssid: "SSID",
     password: "パスワード",
-    url: "URL"
+    url: "URL",
+    text: "テキスト"
   },
   placeholder: {
     ssid: "SSIDを入力",
     password: "パスワードを入力",
-    url: "https://example.com"
+    url: "https://example.com",
+    text: "QRコードにしたい文章を入力"
   },
   action: {
-    download: "PNGダウンロード",
+    download: "ダウンロード",
     generate: "QRコード生成",
     toggle_language: "言語を切り替え",
     show_password: "パスワードを表示",
@@ -50,7 +52,7 @@ export default {
   notice: {
     wifi: "SSIDは必須です。パスワードはオープンネットワークの場合は省略可能です。",
     url: "URLにhttps://を含めてください。省略時は自動で追加されます。",
-    security: "すべてのQR生成はブラウザ内で行われます。データはサーバーに送信されません。"
+    text: "短い文章、メモ、連絡先の補足などをQRコードにできます。"
   },
   qr: {
     preview: "QRコードプレビュー",

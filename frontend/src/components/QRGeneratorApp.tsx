@@ -23,6 +23,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import LanguageIcon from '@mui/icons-material/Language';
 import LinkIcon from '@mui/icons-material/Link';
+import NotesIcon from '@mui/icons-material/Notes';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import SecurityIcon from '@mui/icons-material/Security';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -30,12 +31,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import WifiIcon from '@mui/icons-material/Wifi';
 import { getDocumentPage, type DocumentPageContent, type DocumentPageKey } from '../content/documentPages';
 import { MarkdownArticle } from './MarkdownArticle';
-import { ModeToggle } from './ui/ModeToggle';
+import { ModeToggle, type ModeValue } from './ui/ModeToggle';
 import { TextInput } from './ui/TextInput';
 import { PrimaryButton } from './ui/PrimaryButton';
-import { NoticeText } from './ui/NoticeText';
 
-type QRMode = 'wifi' | 'url';
+type QRMode = ModeValue;
 type AppRoute = 'generator' | DocumentPageKey;
 
 const routePaths: Record<AppRoute, string> = {
@@ -185,6 +185,7 @@ export function QRGeneratorApp() {
   const [ssid, setSsid] = useState('');
   const [password, setPassword] = useState('');
   const [url, setUrl] = useState('');
+  const [text, setText] = useState('');
   const [ssidError, setSsidError] = useState('');
   const [urlError, setUrlError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -217,11 +218,13 @@ export function QRGeneratorApp() {
         setSsidError('');
         generateWiFiQR();
       }
-    } else if (url.trim()) {
+    } else if (mode === 'url' && url.trim()) {
       setUrlError('');
       generateURLQR();
+    } else if (mode === 'text' && text.trim()) {
+      generateTextQR();
     }
-  }, [mode, ssid, password, url, qrSize]);
+  }, [mode, ssid, password, url, text, qrSize]);
 
   const navigateTo = (nextRoute: AppRoute) => {
     const nextPath = routePaths[nextRoute];
@@ -291,6 +294,26 @@ export function QRGeneratorApp() {
     }
   };
 
+  const generateTextQR = async () => {
+    const value = text.trim();
+    if (!value) return;
+
+    try {
+      if (canvasRef.current) {
+        await QRCode.toCanvas(canvasRef.current, value, {
+          width: qrSize,
+          margin: 2,
+          color: {
+            dark: '#172326',
+            light: '#FFFFFF',
+          },
+        });
+      }
+    } catch (err) {
+      console.error('QR generation failed:', err);
+    }
+  };
+
   const downloadQR = () => {
     if (!canvasRef.current || !shouldShowQR) return;
 
@@ -316,10 +339,12 @@ export function QRGeneratorApp() {
 
   const trimmedSsid = ssid.trim();
   const trimmedUrl = url.trim();
+  const trimmedText = text.trim();
   const trimmedPassword = password.trim();
   const hasWifiInput = mode === 'wifi' && Boolean(trimmedSsid);
   const hasUrlInput = mode === 'url' && Boolean(trimmedUrl) && !urlError;
-  const shouldShowQR = hasWifiInput || hasUrlInput;
+  const hasTextInput = mode === 'text' && Boolean(trimmedText);
+  const shouldShowQR = hasWifiInput || hasUrlInput || hasTextInput;
   const canTogglePassword = Boolean(trimmedPassword);
   const previewSide = isMobile ? 256 : 320;
 
@@ -341,12 +366,11 @@ export function QRGeneratorApp() {
     >
       <Stack spacing={3}>
         <Stack
-          direction={{ xs: 'column', md: 'row' }}
           spacing={2}
-          alignItems={{ xs: 'flex-start', md: 'center' }}
-          justifyContent="space-between"
+          alignItems="center"
+          textAlign="center"
         >
-          <Box>
+          <Box sx={{ maxWidth: 640 }}>
             <Typography component="h1" variant="h4" sx={{ fontSize: { xs: 26, sm: 34 } }}>
               {t('app.heading')}
             </Typography>
@@ -354,16 +378,6 @@ export function QRGeneratorApp() {
               {t('app.description')}
             </Typography>
           </Box>
-          <Stack
-            direction="row"
-            spacing={1}
-            useFlexGap
-            flexWrap="wrap"
-            sx={{ display: { xs: 'none', sm: 'flex' } }}
-          >
-            <Chip icon={<WifiIcon />} label="Wi-Fi" sx={{ borderRadius: 999 }} />
-            <Chip icon={<LinkIcon />} label="URL" sx={{ borderRadius: 999 }} />
-          </Stack>
         </Stack>
 
         <Divider />
@@ -377,7 +391,15 @@ export function QRGeneratorApp() {
           }}
         >
           <Stack spacing={2.5}>
-            <ModeToggle defaultMode={mode} onChange={handleModeChange} />
+            <ModeToggle
+              defaultMode={mode}
+              labels={{
+                wifi: t('mode.wifi'),
+                url: t('mode.url'),
+                text: t('mode.text'),
+              }}
+              onChange={handleModeChange}
+            />
 
             {mode === 'wifi' ? (
               <Stack spacing={2}>
@@ -419,7 +441,7 @@ export function QRGeneratorApp() {
                   {t('notice.wifi')}
                 </Alert>
               </Stack>
-            ) : (
+            ) : mode === 'url' ? (
               <Stack spacing={2}>
                 <TextInput
                   id="url-input"
@@ -441,6 +463,32 @@ export function QRGeneratorApp() {
                   }}
                 >
                   {t('notice.url')}
+                </Alert>
+              </Stack>
+            ) : (
+              <Stack spacing={2}>
+                <TextInput
+                  id="text-input"
+                  label={t('label.text')}
+                  placeholder={t('placeholder.text')}
+                  value={text}
+                  onChange={setText}
+                  multiline
+                  minRows={4}
+                  maxRows={8}
+                />
+                <Alert
+                  severity="info"
+                  icon={<NotesIcon fontSize="inherit" />}
+                  sx={{
+                    borderRadius: 2,
+                    backgroundColor:
+                      'color-mix(in srgb, var(--mui-palette-primary-main) 10%, transparent)',
+                    color: 'text.secondary',
+                    '& .MuiAlert-icon': { color: 'primary.main' },
+                  }}
+                >
+                  {t('notice.text')}
                 </Alert>
               </Stack>
             )}
@@ -520,10 +568,6 @@ export function QRGeneratorApp() {
             </Box>
           </Box>
         </Box>
-
-        <Divider />
-
-        <NoticeText>{t('notice.security')}</NoticeText>
       </Stack>
     </Paper>
   );

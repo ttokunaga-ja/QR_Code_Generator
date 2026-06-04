@@ -1,10 +1,9 @@
 export default {
   app: {
     title: "QR Code Generator",
-    subtitle: "Fast Wi-Fi / URL codes",
+    subtitle: "Fast Wi-Fi / URL / text codes",
     heading: "Create a QR code",
-    description: "The preview updates automatically as you type.",
-    private_badge: "Generated in-browser"
+    description: "The preview updates automatically as you type."
   },
   nav: {
     generator: "Create",
@@ -22,20 +21,23 @@ export default {
   },
   mode: {
     wifi: "Wi-Fi",
-    url: "URL"
+    url: "URL",
+    text: "Text"
   },
   label: {
     ssid: "SSID",
     password: "Password",
-    url: "URL"
+    url: "URL",
+    text: "Text"
   },
   placeholder: {
     ssid: "Enter SSID",
     password: "Enter password",
-    url: "https://example.com"
+    url: "https://example.com",
+    text: "Enter the text to put in a QR code"
   },
   action: {
-    download: "Download PNG",
+    download: "Download",
     generate: "Generate QR Code",
     toggle_language: "Toggle language",
     show_password: "Show password",
@@ -50,7 +52,7 @@ export default {
   notice: {
     wifi: "SSID is required. Password is optional for open networks.",
     url: "Include https:// in your URL. It will be added automatically if missing.",
-    security: "All QR generation happens in your browser. No data is sent to servers."
+    text: "Create a QR code from short messages, notes, or extra contact details."
   },
   qr: {
     preview: "QR Code Preview",

@@ -2,18 +2,22 @@ import { useState, useEffect } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+export type ModeValue = 'wifi' | 'url' | 'text';
+
 interface ModeToggleProps {
-  defaultMode?: 'wifi' | 'url';
+  defaultMode?: ModeValue;
   disabled?: boolean;
-  onChange?: (mode: 'wifi' | 'url') => void;
+  labels?: Record<ModeValue, string>;
+  onChange?: (mode: ModeValue) => void;
 }
 
 export function ModeToggle({
   defaultMode = 'wifi',
   disabled = false,
+  labels = { wifi: 'Wi-Fi', url: 'URL', text: 'Text' },
   onChange,
 }: ModeToggleProps) {
-  const [mode, setMode] = useState<'wifi' | 'url'>(defaultMode);
+  const [mode, setMode] = useState<ModeValue>(defaultMode);
 
   // Update internal state when defaultMode changes
   useEffect(() => {
@@ -22,7 +26,7 @@ export function ModeToggle({
 
   const handleModeChange = (
     _event: React.MouseEvent<HTMLElement>,
-    newMode: 'wifi' | 'url' | null,
+    newMode: ModeValue | null,
   ) => {
     if (disabled || newMode === null) return;
     setMode(newMode);
@@ -43,11 +47,11 @@ export function ModeToggle({
         borderRadius: 999,
       }}
     >
-      {(['wifi', 'url'] as const).map((value) => (
+      {(['wifi', 'url', 'text'] as const).map((value) => (
         <ToggleButton
           key={value}
           value={value}
-          aria-label={value === 'wifi' ? 'Wi-Fi mode' : 'URL mode'}
+          aria-label={labels[value]}
           sx={{
             flex: 1,
             py: 1.25,
@@ -71,7 +75,7 @@ export function ModeToggle({
             },
           }}
         >
-          {value === 'wifi' ? 'Wi-Fi' : 'URL'}
+          {labels[value]}
         </ToggleButton>
       ))}
     </ToggleButtonGroup>
