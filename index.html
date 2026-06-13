@@ -4,10 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F6F8F7" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#071211" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#F6F8F7"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#071211"
+    />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/og/qr-code-generator.png" />
+    <!-- nosemgrep: html.security.audit.missing-integrity.missing-integrity - AdSense serves a dynamic bootstrap script, so SRI cannot be pinned. -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7697644211260095"
+      crossorigin="anonymous"
+    ></script>
     <!-- SEO -->
   </head>
 
@@ -16,13 +30,18 @@
       <noscript>
         <h1>QR Code Generator</h1>
         <p>
-          Wi-Fi・URL・テキストの QR コードをブラウザだけで無料生成できるツールです。
+          Wi-Fi・URL・テキストの QR
+          コードをブラウザだけで無料生成できるツールです。
           入力内容はサーバーに送信されず、すべて端末内で処理されます。
           ご利用には JavaScript を有効にしてください。
         </p>
         <ul>
           <li><a href="/faq">よくある質問 (FAQ)</a></li>
-          <li><a href="/policy">安心して使うために（プライバシー・セキュリティ）</a></li>
+          <li>
+            <a href="/policy"
+              >安心して使うために（プライバシー・セキュリティ）</a
+            >
+          </li>
         </ul>
       </noscript>
     </div>
